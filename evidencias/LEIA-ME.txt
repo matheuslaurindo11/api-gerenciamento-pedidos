@@ -1,0 +1,8 @@
+Coloque nesta pasta as cinco capturas reais feitas no Postman, conforme descrito no README.md.
+
+Não foram incluídas capturas fictícias. Execute e teste a API, faça as capturas mostrando método, URL, corpo (quando aplicável), resposta e código HTTP, e salve-as com os nomes:
+01-criacao.png
+02-validacao.png
+03-listagem.png
+04-consulta-inexistente.png
+05-atualizacao.png

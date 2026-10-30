@@ -1,0 +1,139 @@
+{
+  "info": {
+    "name": "API de Gerenciamento de Pedidos",
+    "_postman_id": "9b40e8a7-90e8-4d1e-b2ab-2ed0f9b812f2",
+    "description": "Coleção de exemplos para testar os endpoints obrigatórios. Execute a criação antes das chamadas que usam o ID 1.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "01 - Criar pedido (201)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cliente\": \"Carlos Silva\",\n  \"tipo\": \"entrega\",\n  \"valor\": 350,\n  \"prioridade\": \"normal\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/pedidos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pedidos"
+          ]
+        }
+      }
+    },
+    {
+      "name": "02 - Validacao cliente vazio (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cliente\": \"   \",\n  \"tipo\": \"entrega\",\n  \"valor\": 350,\n  \"prioridade\": \"normal\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/pedidos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pedidos"
+          ]
+        }
+      }
+    },
+    {
+      "name": "03 - Listar pedidos (200)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/pedidos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pedidos"
+          ]
+        }
+      }
+    },
+    {
+      "name": "04 - Consultar pedido inexistente (404)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/pedidos/999",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pedidos",
+            "999"
+          ]
+        }
+      }
+    },
+    {
+      "name": "05 - Atualizar status (200; requer pedido ID 1)",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"em_preparacao\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/pedidos/1/status",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "pedidos",
+            "1",
+            "status"
+          ]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    }
+  ]
+}
