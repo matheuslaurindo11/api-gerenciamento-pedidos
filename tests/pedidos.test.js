@@ -59,4 +59,28 @@ describe('API de Gerenciamento de Pedidos', () => {
     const resposta = await request(app).patch('/pedidos/1/status').send({ status: 'entregue' });
     expect(resposta.status).toBe(400);
   });
+
+  test('POST /pedidos rejeita valor negativo', async () => {
+    const resposta = await request(app)
+      .post('/pedidos')
+      .send({ ...pedidoValido, valor: -10 });
+
+    expect(resposta.status).toBe(400);
+  });
+
+  test('POST /pedidos rejeita tipo inválido', async () => {
+    const resposta = await request(app)
+      .post('/pedidos')
+      .send({ ...pedidoValido, tipo: 'invalido' });
+
+    expect(resposta.status).toBe(400);
+  });
+
+  test('POST /pedidos rejeita prioridade inválida', async () => {
+    const resposta = await request(app)
+      .post('/pedidos')
+      .send({ ...pedidoValido, prioridade: 'invalida' });
+
+    expect(resposta.status).toBe(400);
+  });
 });
