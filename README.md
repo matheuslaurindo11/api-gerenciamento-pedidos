@@ -129,9 +129,19 @@ Execute os testes com:
 npm test
 ```
 
-Durante o desenvolvimento, foram executados e aprovados **7 testes automatizados**.
+Durante o desenvolvimento, foram executados e aprovados **10 testes automatizados**.
 
-Os testes verificam criação de pedidos, validações, listagem, consulta inexistente, atualização de status e transição inválida.
+Os testes verificam:
+- Criação de pedidos válidos.
+- Rejeição de clientes vazios.
+- Rejeição de valores menores ou iguais a zero.
+- Rejeição de valores negativos.
+- Rejeição de tipos inválidos.
+- Rejeição de prioridades inválidas.
+- Listagem de pedidos.
+- Consulta de pedidos inexistentes.
+- Atualização de status.
+- Rejeição de transições de status inválidas.
 
 ## 9. Evidências dos testes no Postman
 
