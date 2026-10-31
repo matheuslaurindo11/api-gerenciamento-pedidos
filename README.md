@@ -1,23 +1,53 @@
 # API de Gerenciamento de Pedidos
 
-Projeto prático avaliativo da disciplina **Tópicos Avançados em Sistemas de Informação II**.
+**Projeto acadêmico — Tópicos Avançados em Sistemas de Informação II**
 
-API REST desenvolvida para cadastrar, consultar, listar e atualizar pedidos de uma pequena loja.
+## 1. Identificação
 
-## 1. Tecnologias utilizadas
+- **Aluno:** Matheus Laurindo
+- **RGM:** 42405220
+- **Tecnologia principal:** Node.js
+- **Framework:** Express
+- **Linguagem:** JavaScript
 
-- Node.js e Express com JavaScript.
-- Jest e Supertest para testes automatizados.
-- Postman para testes manuais.
-- Git e GitHub para versionamento.
-- Armazenamento em memória.
+## 2. Descrição do projeto
 
-## 2. Requisitos
+A API de Gerenciamento de Pedidos foi desenvolvida para permitir o cadastro, a consulta, a listagem e a atualização de status de pedidos.
 
-- Node.js 18 ou superior.
+O projeto utiliza Node.js e Express, com organização em camadas para separar as responsabilidades de rotas, controladores e serviços.
+
+Os dados são armazenados em memória durante a execução da aplicação.
+
+## 3. Tecnologias utilizadas
+
+- Node.js
+- Express
+- JavaScript
+- Jest
+- Supertest
+- Postman
+- Git e GitHub
+
+## 4. Instalação e execução
+
+### Pré-requisitos
+
+- Node.js versão 18 ou superior.
 - npm.
 
-## 3. Instalação e execução
+### Instalação
+
+Clone o repositório:
+
+```bash
+git clone https://github.com/matheuslaurindo11/api-gerenciamento-pedidos.git
+```
+
+Entre na pasta:
+
+```bash
+cd api-gerenciamento-pedidos
+```
 
 Instale as dependências:
 
@@ -25,72 +55,66 @@ Instale as dependências:
 npm install
 ```
 
-Inicie o servidor:
+Inicie a aplicação:
 
 ```bash
 npm start
 ```
 
-Para desenvolvimento com reinicialização automática:
+A API estará disponível em:
 
-```bash
-npm run dev
+```text
+http://localhost:3000
 ```
 
-A API ficará disponível em:
+## 5. Endpoints disponíveis
 
-`http://localhost:3000`
+| Método | Rota | Descrição |
+|---|---|---|
+| POST | `/pedidos` | Cadastrar um pedido |
+| GET | `/pedidos` | Listar todos os pedidos |
+| GET | `/pedidos/:id` | Consultar pedido pelo ID |
+| PATCH | `/pedidos/:id/status` | Atualizar o status do pedido |
 
-## 4. Arquitetura do projeto
+### 5.1 Cadastro de pedido
 
-- `src/routes/`: define as rotas e encaminha as requisições.
-- `src/controllers/`: recebe as requisições HTTP e define as respostas.
-- `src/services/`: contém as regras de negócio, validações e armazenamento dos pedidos.
-- `src/app.js`: configura a aplicação Express e o tratamento de erros.
-- `src/server.js`: inicia o servidor.
-- `tests/`: contém os testes automatizados.
-- `evidencias/`: armazena as capturas dos testes realizados no Postman.
+**POST /pedidos**
 
-A aplicação utiliza arquitetura em camadas para separar responsabilidades e facilitar a manutenção.
-
-## 5. Endpoints
-
-| Método | Rota | Descrição | Resposta |
-|---|---|---|---|
-| POST | `/pedidos` | Cadastrar pedido | 201 |
-| GET | `/pedidos` | Listar pedidos | 200 |
-| GET | `/pedidos/:id` | Consultar pedido | 200 ou 404 |
-| PATCH | `/pedidos/:id/status` | Atualizar status | 200, 400 ou 404 |
-
-### Exemplo de criação de pedido
-
-Requisição: `POST /pedidos`
+Exemplo de corpo JSON:
 
 ```json
 {
-  "cliente": "Carlos Silva",
+  "cliente": "João Silva",
+  "valor": 150.00,
   "tipo": "entrega",
-  "valor": 350,
   "prioridade": "normal"
 }
 ```
 
-Resposta esperada: HTTP 201.
+Retorno esperado: HTTP 201.
 
-```json
-{
-  "id": 1,
-  "cliente": "Carlos Silva",
-  "tipo": "entrega",
-  "valor": 350,
-  "prioridade": "normal",
-  "status": "recebido"
-}
-```
+### 5.2 Listagem de pedidos
 
-### Exemplo de atualização de status
+**GET /pedidos**
 
-Requisição: `PATCH /pedidos/1/status`
+Retorna os pedidos cadastrados.
+
+Retorno esperado: HTTP 200.
+
+### 5.3 Consulta de pedido
+
+**GET /pedidos/:id**
+
+Consulta um pedido pelo identificador.
+
+- Pedido encontrado: HTTP 200.
+- Pedido inexistente: HTTP 404.
+
+### 5.4 Atualização de status
+
+**PATCH /pedidos/:id/status**
+
+Exemplo de corpo JSON:
 
 ```json
 {
@@ -98,80 +122,133 @@ Requisição: `PATCH /pedidos/1/status`
 }
 ```
 
-## 6. Valores aceitos
+A atualização depende das transições de status permitidas pela aplicação.
 
-- **Tipo:** `entrega`, `retirada`.
-- **Prioridade:** `baixa`, `normal`, `alta`, `urgente`.
-- **Status:** `recebido`, `em_preparacao`, `enviado`, `entregue`, `cancelado`.
+## 6. Validações implementadas
 
-### Transições permitidas
+A API possui validações para:
 
-- `recebido` → `em_preparacao` ou `cancelado`.
-- `em_preparacao` → `enviado` ou `cancelado`.
-- `enviado` → `entregue` ou `cancelado`.
-- `entregue` e `cancelado` são estados finais.
+- Campo de cliente obrigatório.
+- Valor numérico maior que zero.
+- Tipo de pedido válido.
+- Prioridade válida.
+- Status permitido.
+- Transições de status válidas.
+- Identificação de pedidos inexistentes.
+- Tratamento de JSON malformado.
 
-## 7. Validações e tratamento de erros
+Os principais códigos HTTP utilizados são:
 
-- Cliente obrigatório e não vazio.
-- Valor numérico, finito e maior que zero.
-- Tipo, prioridade e status devem pertencer aos valores permitidos.
-- Identificador inexistente retorna HTTP 404.
-- Dados inválidos e transições não permitidas retornam HTTP 400.
-- JSON malformado retorna HTTP 400.
-- Erros inesperados são tratados com HTTP 500.
+| Código | Significado |
+|---|---|
+| 200 | Operação realizada com sucesso |
+| 201 | Pedido criado |
+| 400 | Dados inválidos |
+| 404 | Pedido não encontrado |
+| 500 | Erro interno do servidor |
+
+## 7. Arquitetura do projeto
+
+O projeto foi organizado em camadas:
+
+```text
+src/
+├── app.js
+├── server.js
+├── controllers/
+│   └── pedidos.controller.js
+├── routes/
+│   └── pedidos.routes.js
+└── services/
+    └── pedidos.service.js
+
+tests/
+└── pedidos.test.js
+
+evidencias/
+```
+
+**Responsabilidades:**
+
+- **Routes:** definem os caminhos e métodos HTTP.
+- **Controllers:** recebem as requisições e retornam as respostas.
+- **Services:** concentram as regras de negócio e validações.
+- **App:** configura o Express e os tratamentos de erro.
+- **Server:** inicia o servidor.
+- **Tests:** verificam o comportamento dos endpoints.
+
+O padrão utilizado é uma arquitetura em camadas, separando as responsabilidades da aplicação.
 
 ## 8. Testes automatizados
 
-Execute os testes com:
+Os testes foram desenvolvidos com Jest e Supertest.
+
+Para executar:
 
 ```bash
 npm test
 ```
 
-Durante o desenvolvimento, foram executados e aprovados **10 testes automatizados**.
+Durante o desenvolvimento, foram executados e aprovados **13 testes automatizados**.
 
 Os testes verificam:
-- Criação de pedidos válidos.
-- Rejeição de clientes vazios.
-- Rejeição de valores menores ou iguais a zero.
-- Rejeição de valores negativos.
-- Rejeição de tipos inválidos.
-- Rejeição de prioridades inválidas.
-- Listagem de pedidos.
-- Consulta de pedidos inexistentes.
-- Atualização de status.
-- Rejeição de transições de status inválidas.
+
+1. Criação de pedidos válidos.
+2. Rejeição de clientes vazios.
+3. Rejeição de valores menores ou iguais a zero.
+4. Rejeição de valores negativos.
+5. Rejeição de tipos inválidos.
+6. Rejeição de prioridades inválidas.
+7. Listagem de pedidos.
+8. Consulta de pedidos inexistentes.
+9. Atualização de status.
+10. Rejeição de transições de status inválidas.
+11. Rejeição de status desconhecidos no PATCH.
+12. Atualização de pedido inexistente.
+13. Rejeição de JSON malformado.
 
 ## 9. Evidências dos testes no Postman
 
-As cinco evidências dos testes manuais devem ser armazenadas na pasta `evidencias/`:
+A pasta `evidencias/` contém capturas de tela dos testes manuais realizados no Postman:
 
-1. `01-criacao.png` — criação válida, HTTP 201.
-2. `02-validacao.png` — dados inválidos, HTTP 400.
-3. `03-listagem.png` — listagem de pedidos, HTTP 200.
-4. `04-consulta-inexistente.png` — consulta de pedido inexistente, HTTP 404.
-5. `05-atualizacao.png` — atualização de status, HTTP 200.
+- `01-criacao.png` — Cadastro de pedido.
+- `02-validacao.png` — Validação de dados inválidos.
+- `03-listagem.png` — Listagem de pedidos.
+- `04-consulta-inexistente.png` — Consulta de pedido inexistente.
+- `05-atualizacao.png` — Atualização de status.
 
-As capturas devem mostrar o método, a URL, o corpo da requisição quando aplicável e a resposta da API.
+## 10. Controle de versão
 
-## 10. Git e GitHub
+O projeto utiliza Git para controle de versão e GitHub para hospedagem do código-fonte.
 
-O Git é utilizado para controlar as versões do projeto, enquanto o GitHub hospeda o código-fonte.
+Repositório:
 
-O histórico de desenvolvimento deve conter pelo menos cinco commits significativos, representando etapas reais da implementação.
+https://github.com/matheuslaurindo11/api-gerenciamento-pedidos
 
-## 11. Uso de inteligência artificial
+O histórico de commits registra a evolução e as melhorias realizadas durante o desenvolvimento.
 
-A inteligência artificial foi utilizada como ferramenta de apoio durante o desenvolvimento, auxiliando na organização da arquitetura, implementação de validações, elaboração de testes, documentação e resolução de dúvidas técnicas.
+## 11. Utilização de Inteligência Artificial
 
-Uma sugestão aceita foi separar a aplicação em rotas, controllers e services, facilitando a organização e a manutenção do código.
+A Inteligência Artificial foi utilizada como ferramenta de apoio durante o desenvolvimento do projeto.
 
-A implementação foi executada e testada durante o desenvolvimento. O aluno permanece responsável por compreender e revisar o código entregue.
+As principais atividades realizadas com esse apoio foram:
 
-## 12. Limitações conhecidas
+- Esclarecimento de conceitos de Node.js e Express.
+- Apoio na organização da arquitetura em camadas.
+- Orientação na implementação de validações.
+- Auxílio na elaboração e revisão dos testes automatizados.
+- Apoio na documentação do projeto.
 
-- Os pedidos são armazenados em memória.
-- Os dados são perdidos quando o servidor é reiniciado.
-- Não foi utilizado banco de dados, conforme permitido no enunciado.
-- O professor poderá realizar testes adicionais na API.
+As sugestões foram analisadas e adaptadas conforme as necessidades da atividade. O código e os testes foram executados para verificar o funcionamento da aplicação.
+
+## 12. Limitações do projeto
+
+Os pedidos são armazenados em memória. Portanto, os dados cadastrados são perdidos quando o servidor é reiniciado.
+
+Essa abordagem foi utilizada para atender ao escopo acadêmico da atividade, sem necessidade de integração com banco de dados.
+
+## 13. Considerações finais
+
+O desenvolvimento deste projeto permitiu aplicar conhecimentos de Node.js, Express, arquitetura em camadas, validação de dados, testes automatizados, testes manuais com Postman e controle de versão com Git e GitHub.
+
+A API atende às funcionalidades propostas na atividade de gerenciamento de pedidos.
