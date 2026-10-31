@@ -95,4 +95,14 @@ describe('API de Gerenciamento de Pedidos', () => {
     expect(resposta.status).toBe(404);
   });
 
+
+  test("POST rejeita JSON malformado com HTTP 400", async () => {
+    const resposta = await request(app)
+      .post("/pedidos")
+      .set("Content-Type", "application/json")
+      .send('{"cliente":');
+    expect(resposta.status).toBe(400);
+    expect(resposta.body.erro).toMatch(/JSON inválido/i);
+  });
+
 });
