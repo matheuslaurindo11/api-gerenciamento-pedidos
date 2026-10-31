@@ -83,4 +83,16 @@ describe('API de Gerenciamento de Pedidos', () => {
 
     expect(resposta.status).toBe(400);
   });
+
+  test("PATCH rejeita status inválido com HTTP 400", async () => {
+    await request(app).post("/pedidos").send(pedidoValido);
+    const resposta = await request(app).patch("/pedidos/1/status").send({ status: "desconhecido" });
+    expect(resposta.status).toBe(400);
+  });
+
+  test("PATCH retorna HTTP 404 para pedido inexistente", async () => {
+    const resposta = await request(app).patch("/pedidos/999/status").send({ status: "cancelado" });
+    expect(resposta.status).toBe(404);
+  });
+
 });
